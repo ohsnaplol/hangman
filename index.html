@@ -32,5 +32,44 @@
         </div>
       </main>
     </div> <!-- /container -->
+
+    <script>
+        var mysteryWord = "initial";
+        var knownWord = [];
+        var tries = 8;
+
+        while(!knownWordHasBeenGuessed) {
+          var submittedChar = prompt("What letter would you like to guess with?");
+        }
+
+        function knownWordHasBeenGuessed() {
+          for (var i = 0; i < knownWord.length; i++) {
+            // If we ever see a _, the user hasn't guessed all the letters
+            if(knownWord[i] === '_') {
+              return false;
+            }
+          }
+          return true;
+        }
+
+        function createEmptySpacesForKnownWord(word) {
+          for (var i = 0; i < word.length; i++) {
+            knownWord.append('_');
+          }
+        }
+
+        function submitCharAddToKnownWordIfCorrect(char) {
+          for (var i = 0; i < mysteryWord.length; i++) {
+            // if submitted char is same as mysteryWord[i]
+            if (char === mysteryWord.charAt(i)) {
+              // fill knownWord slot with the char
+              knownWord[i] = char;
+            }
+          }
+        }
+
+
+
+    </script>
   </body>
 </html>
