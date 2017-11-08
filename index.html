@@ -1,75 +1,93 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <title>Hangman</title>
+  <title>Hangman</title>
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
-    <!-- Custom styles for this template -->
-    <link href="./assets/style.css" rel="stylesheet">
-  </head>
+  <!-- Custom styles for this template -->
+  <link href="./assets/style.css" rel="stylesheet">
+</head>
 
-  <body>
+<body>
 
-    <div class="container">
-      <header class="header clearfix">
-        <h3 class="text-muted">Hangman</h3>
-      </header>
+  <div class="container">
+    <header class="header clearfix">
+      <h3 class="text-muted">Hangman</h3>
+    </header>
 
-      <main role="main">
+    <main role="main">
 
-        <div class="jumbotron">
-          <h1 class="display-3">Welcome to Hangman</h1>
-          <p class="lead">Word</p>
-          <p><a class="btn btn-lg btn-success" href="#" role="button">Submit</a></p>
-        </div>
-      </main>
-    </div> <!-- /container -->
+      <div class="jumbotron">
+        <h1 class="display-3">Welcome to Hangman</h1>
+        <p class="lead" id="theWord">Word</p>
+        <p><a onclick="startGame()" class="btn btn-lg btn-success" href="#" role="button">Submit</a></p>
+      </div>
+    </main>
+  </div> <!-- /container -->
 
-    <script>
-        var mysteryWord = "initial";
-        var knownWord = [];
-        var tries = 8;
+  <script>
+      var mysteryWord = "initial";
+      var knownWord = [];
+      var tries = 6;
 
-        while(!knownWordHasBeenGuessed) {
-          var submittedChar = prompt("What letter would you like to guess with?");
+      function startGame() {
+        knownWord = [];
+        mysteryWord = prompt("Enter the word you want people to guess");
+
+        if(mysteryWord === null || mysteryWord === "") {
+          return;
+        } else {
+          createEmptySpacesForKnownWord();
+          updateLabel();
         }
+      }
 
-        function knownWordHasBeenGuessed() {
-          for (var i = 0; i < knownWord.length; i++) {
-            // If we ever see a _, the user hasn't guessed all the letters
-            if(knownWord[i] === '_') {
-              return false;
-            }
+      function updateLabel() {
+        document.getElementById("theWord").innerHTML = knownWord;
+      }
+
+      document.onkeyup = function(event) {
+        var letter = String.fromCharCode(event.keyCode).toLowerCase();
+        addCharToKnownWordIfCorrect(letter);
+        updateLabel();
+      }
+
+      function knownWordHasBeenGuessed() {
+        for (var i = 0; i < knownWord.length; i++) {
+          // If we ever see a _, the user hasn't guessed all the letters
+          if(knownWord[i] === '_') {
+            return false;
           }
-          return true;
         }
+        return true;
+      }
 
-        function createEmptySpacesForKnownWord(word) {
-          for (var i = 0; i < word.length; i++) {
-            knownWord.append('_');
+      function createEmptySpacesForKnownWord(word) {
+        for (var i = 0; i < mysteryWord.length; i++) {
+          knownWord.push('_');
+        }
+      }
+
+// TODO make it so if there were no correct matches, return something idk
+      function addCharToKnownWordIfCorrect(char) {
+        for (var i = 0; i < mysteryWord.length; i++) {
+          // if submitted char is same as mysteryWord[i]
+          if (char === mysteryWord.charAt(i)) {
+            // fill knownWord slot with the char
+            knownWord[i] = char;
           }
         }
-
-        function submitCharAddToKnownWordIfCorrect(char) {
-          for (var i = 0; i < mysteryWord.length; i++) {
-            // if submitted char is same as mysteryWord[i]
-            if (char === mysteryWord.charAt(i)) {
-              // fill knownWord slot with the char
-              knownWord[i] = char;
-            }
-          }
-        }
+      }
 
 
 
-    </script>
-  </body>
+  </script>
+</body>
 </html>
