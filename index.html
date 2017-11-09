@@ -21,74 +21,82 @@
     <main role="main">
       <div class="jumbotron">
         <h1 class="display-3">Hangman</h1>
-        <p class="lead" id="theWord"></p>
-        <p><a onclick="startGame()" class="btn btn-lg btn-success" href="#" role="button">New Game</a></p>
+        <div class="row">
+          <div class="col">
+            <canvas id="canvas" width="300" height="300">
+              Sorry, your browser doesn't support the &lt;canvas&gt; element.
+            </canvas>
+          </div>
+          <div class="col">
+            <p class="lead" id="theWord"></p>
+            <p><a onclick="startGame()" class="btn btn-lg btn-success" href="#" role="button">New Game</a></p>
+          </div>
+        </div>
       </div>
     </main>
   </div> <!-- /container -->
 
   <script>
-      var mysteryWord = "initial";
-      var knownWord = [];
-      var tries = 6;
-      var gameIsActive;
+    var mysteryWord = "initial";
+    var knownWord = [];
+    var tries = 6;
+    var gameIsActive;
+    var c = document.getElementById("canvas");
+		var ctx = c.getContext("2d");
 
-      function startGame() {
-        knownWord = [];
-        mysteryWord = prompt("Enter the word you want people to guess");
+		ctx.beginPath();
+		ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+		ctx.stroke();
 
-        if(mysteryWord !== null || mysteryWord !== "") {
-          gameIsActive = true;
-          createEmptySpacesForKnownWord();
-          updateLabel();
+    function startGame() {
+      knownWord = [];
+      mysteryWord = prompt("Enter the word you want people to guess");
+
+      if(mysteryWord !== null || mysteryWord !== "") {
+        gameIsActive = true;
+        createEmptySpacesForKnownWord();
+        updateLabel();
+      }
+    }
+
+    function updateLabel() {
+      document.getElementById("theWord").innerHTML = knownWord.join(' ');
+    }
+
+    document.onkeyup = function(event) {
+      if(gameIsActive) {
+        var letter = String.fromCharCode(event.keyCode).toLowerCase();
+        addCharToKnownWordIfCorrect(letter);
+        updateLabel();
+      }
+    }
+
+    function knownWordHasBeenGuessed() {
+      for (var i = 0; i < knownWord.length; i++) {
+        // If we ever see a _, the user hasn't guessed all the letters
+        if(knownWord[i] === '_') {
+          return false;
         }
       }
+      gameIsActive = false;
+      return true;
+    }
 
-      function updateLabel() {
-        document.getElementById("theWord").innerHTML = knownWord.join(' ');
+    function createEmptySpacesForKnownWord(word) {
+      for (var i = 0; i < mysteryWord.length; i++) {
+        knownWord.push('_');
       }
+    }
 
-      document.onkeyup = function(event) {
-        if(gameIsActive) {
-          var letter = String.fromCharCode(event.keyCode).toLowerCase();
-          addCharToKnownWordIfCorrect(letter);
-          updateLabel();
-          if(knownWordHasBeenGuessed()) {
-            gameIsActive = false;
-          }
+    function addCharToKnownWordIfCorrect(char) {
+      for (var i = 0; i < mysteryWord.length; i++) {
+        // if submitted char is same as mysteryWord[i]
+        if (char === mysteryWord.charAt(i)) {
+          // fill knownWord slot with the char
+          knownWord[i] = char;
         }
       }
-
-      function knownWordHasBeenGuessed() {
-        for (var i = 0; i < knownWord.length; i++) {
-          // If we ever see a _, the user hasn't guessed all the letters
-          if(knownWord[i] === '_') {
-            console.log("false");
-            return false;
-          }
-        }
-        console.log("true");
-        return true;
-      }
-
-      function createEmptySpacesForKnownWord(word) {
-        for (var i = 0; i < mysteryWord.length; i++) {
-          knownWord.push('_');
-        }
-      }
-
-      function addCharToKnownWordIfCorrect(char) {
-        for (var i = 0; i < mysteryWord.length; i++) {
-          // if submitted char is same as mysteryWord[i]
-          if (char === mysteryWord.charAt(i)) {
-            // fill knownWord slot with the char
-            knownWord[i] = char;
-          }
-        }
-      }
-
-
-
+    }
   </script>
 </body>
 </html>
