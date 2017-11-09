@@ -37,9 +37,7 @@
         knownWord = [];
         mysteryWord = prompt("Enter the word you want people to guess");
 
-        if(mysteryWord === null || mysteryWord === "") {
-          return;
-        } else {
+        if(mysteryWord !== null || mysteryWord !== "") {
           gameIsActive = true;
           createEmptySpacesForKnownWord();
           updateLabel();
@@ -56,7 +54,6 @@
           addCharToKnownWordIfCorrect(letter);
           updateLabel();
           if(knownWordHasBeenGuessed()) {
-            alert("You did it!");
             gameIsActive = false;
           }
         }
