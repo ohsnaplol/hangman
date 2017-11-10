@@ -44,8 +44,25 @@
     var c = document.getElementById("canvas");
 		var ctx = c.getContext("2d");
 
+    // base
+    ctx.moveTo(10,250);
+    ctx.lineTo(100,250);
+    ctx.stroke();
+    // rope
+    ctx.moveTo(100,10);
+    ctx.lineTo(100,30);
+    ctx.stroke();
+    // pole
+    ctx.moveTo(10,10);
+    ctx.lineTo(10,250);
+    ctx.stroke();
+    // top
+    ctx.moveTo(10,10);
+    ctx.lineTo(150,10);
+    ctx.stroke();
+    // head
 		ctx.beginPath();
-		ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+		ctx.arc(100, 65, 35, 0, 2 * Math.PI);
 		ctx.stroke();
 
     function startGame() {
