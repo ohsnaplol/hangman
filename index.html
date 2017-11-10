@@ -40,32 +40,29 @@
     var mysteryWord = "initial";
     var knownWord = [];
     var tries = 6;
-    var gameIsActive;
+    var gameIsActive = false;
     var c = document.getElementById("canvas");
 		var ctx = c.getContext("2d");
 
+    // Setup hangman drawing
     // base
     ctx.moveTo(10,250);
     ctx.lineTo(100,250);
-    ctx.stroke();
     // rope
     ctx.moveTo(100,10);
     ctx.lineTo(100,30);
-    ctx.stroke();
     // pole
     ctx.moveTo(10,10);
     ctx.lineTo(10,250);
-    ctx.stroke();
     // top
     ctx.moveTo(10,10);
     ctx.lineTo(150,10);
     ctx.stroke();
-    // head
-		ctx.beginPath();
-		ctx.arc(100, 65, 35, 0, 2 * Math.PI);
-		ctx.stroke();
 
+    // When user clicks New Game button
     function startGame() {
+      ctx.clearRect(15,29,220,220);
+      tries = 6;
       knownWord = [];
       mysteryWord = prompt("Enter the word you want people to guess");
 
@@ -80,15 +77,64 @@
       document.getElementById("theWord").innerHTML = knownWord.join(' ');
     }
 
+    // Primary game logic
     document.onkeyup = function(event) {
-      if(gameIsActive) {
+      if(gameIsActive && !wordComplete()) {
         var letter = String.fromCharCode(event.keyCode).toLowerCase();
-        addCharToKnownWordIfCorrect(letter);
-        updateLabel();
+        if(wordContains(letter)) {
+          updateLabel();
+        } else {
+          tries--;
+          updateHangman(tries);
+          if(tries <= 0) {
+            gameIsActive = false;
+          }
+        }
       }
     }
 
-    function knownWordHasBeenGuessed() {
+    function updateHangman(tries) {
+      switch (tries) {
+        case 5:
+          // head
+          ctx.beginPath();
+          ctx.arc(100, 65, 35, 0, 2 * Math.PI);
+          ctx.stroke();
+          break;
+        case 4:
+          // body
+          ctx.moveTo(100,100);
+          ctx.lineTo(100,180);
+          ctx.stroke();
+          break;
+        case 3:
+          // left leg
+          ctx.moveTo(100,180);
+          ctx.lineTo(70,230);
+          ctx.stroke();
+          break;
+        case 2:
+          // right leg
+          ctx.moveTo(100,180);
+          ctx.lineTo(130,230);
+          ctx.stroke();
+          break;
+        case 1:
+          // left arm
+          ctx.moveTo(100,100);
+          ctx.lineTo(70,150);
+          ctx.stroke();
+          break;
+        case 0:
+          // right arm
+          ctx.moveTo(100,100);
+          ctx.lineTo(130,150);
+          ctx.stroke();
+          break;
+      }
+    }
+
+    function wordComplete() {
       for (var i = 0; i < knownWord.length; i++) {
         // If we ever see a _, the user hasn't guessed all the letters
         if(knownWord[i] === '_') {
@@ -105,14 +151,17 @@
       }
     }
 
-    function addCharToKnownWordIfCorrect(char) {
+    function wordContains(char) {
+      var containsLetterFlag = false
       for (var i = 0; i < mysteryWord.length; i++) {
         // if submitted char is same as mysteryWord[i]
         if (char === mysteryWord.charAt(i)) {
           // fill knownWord slot with the char
           knownWord[i] = char;
+          containsLetterFlag = true;
         }
       }
+      return containsLetterFlag;
     }
   </script>
 </body>
