@@ -45,18 +45,13 @@
 
     // Setup hangman drawing
     // base
-    ctx.moveTo(10,250);
-    ctx.lineTo(100,250);
+    drawLine(10, 250, 100, 250);
     // rope
-    ctx.moveTo(100,10);
-    ctx.lineTo(100,30);
+    drawLine(100, 10, 100, 30);
     // pole
-    ctx.moveTo(10,10);
-    ctx.lineTo(10,250);
+    drawLine(10, 10, 10, 250);
     // top
-    ctx.moveTo(10,10);
-    ctx.lineTo(150,10);
-    ctx.stroke();
+    drawLine(10, 10, 150, 10);
 
     // When user clicks New Game button
     function startGame() {
@@ -101,35 +96,32 @@
           break;
         case 4:
           // body
-          ctx.moveTo(100,100);
-          ctx.lineTo(100,180);
-          ctx.stroke();
+          drawLine(100, 100, 100, 180);
           break;
         case 3:
           // left leg
-          ctx.moveTo(100,180);
-          ctx.lineTo(70,230);
-          ctx.stroke();
+          drawLine(100, 180, 70, 230);
           break;
         case 2:
           // right leg
-          ctx.moveTo(100,180);
-          ctx.lineTo(130,230);
-          ctx.stroke();
+          drawLine(100, 180, 130, 230);
           break;
         case 1:
           // left arm
-          ctx.moveTo(100,100);
-          ctx.lineTo(70,150);
-          ctx.stroke();
+          drawLine(100, 100, 70, 150);
           break;
         case 0:
           // right arm
-          ctx.moveTo(100,100);
-          ctx.lineTo(130,150);
-          ctx.stroke();
+          drawLine(100, 100, 130, 150);
           break;
       }
+    }
+
+    // x and y is where to begin, x2 y2 is where to stop drawing
+    function drawLine(x, y, x2, y2) {
+      ctx.moveTo(x,y);
+      ctx.lineTo(x2,y2);
+      ctx.stroke();
     }
 
     function wordContains(char) {
