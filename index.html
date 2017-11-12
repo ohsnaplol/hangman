@@ -29,6 +29,8 @@
           </div>
           <div class="col">
             <p class="lead" id="theWord"></p>
+            <p class="lead" id="failedLetters"></p>
+            <hr>
             <p><a onclick="startGame()" class="btn btn-lg btn-success" href="#" role="button">New Game</a></p>
           </div>
         </div>
@@ -39,10 +41,10 @@
   <script>
     var mysteryWord = "initial";
     var knownWord = [];
+    var failedLetters = [];
     var tries = 6;
     var c = document.getElementById("canvas");
 		var ctx = c.getContext("2d");
-    document.getElementById("theWord").onclick = function() {onTouchWord()};
 
     // Setup hangman drawing
     // base
@@ -54,15 +56,13 @@
     // top
     drawLine(10, 10, 150, 10);
 
-    function onTouchWord() {
-      focus();
-    }
-
     // When user clicks New Game button
     function startGame() {
       ctx.clearRect(15,29,220,220);
       tries = 6;
       knownWord = [];
+      failedLetters = [];
+      document.getElementById('failedLetters').innerHTML = failedLetters;
       mysteryWord = prompt("Enter the word you want people to guess");
 
       if(mysteryWord !== null || mysteryWord !== "") {
@@ -84,9 +84,11 @@
         var letter = String.fromCharCode(event.keyCode).toLowerCase();
         if(wordContains(letter)) {
           updateLabel();
-        } else {
+        } else if (!failedLetters.includes(letter)){
+          failedLetters.push(letter);
           tries--;
           updateHangman(tries);
+          document.getElementById('failedLetters').innerHTML = failedLetters;
         }
       }
     }
